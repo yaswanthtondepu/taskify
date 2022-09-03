@@ -10,20 +10,20 @@ type Props = {
     todos: Todo[];
     setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
     index: number;
+    completedTodos: Todo[];
+    setCompletedTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 }
 
-const SingleTodo:React.FC<Props> = ({todo, todos,setTodos, index}) => {
+const SingleTodo:React.FC<Props> = ({todo, todos,setTodos, index,completedTodos,setCompletedTodos}) => {
 
     const [edit, setEdit] = React.useState<boolean>(false);
     const [editTodo, setEditTodo] = React.useState<string>(todo.todo);
 
     const handleDone = (id:number) => {
-        setTodos(todos.map((todo) => {
-            if(todo.id === id){
-                return {...todo, isDone: !todo.isDone}
-            }
-            return todo;
-        }))
+        let removedTodo = todos.filter(todo => todo.id === id);
+        removedTodo[0].isDone = true;
+        setTodos(todos.filter(todo => todo.id !== id));
+        setCompletedTodos([...completedTodos, ...removedTodo]);
     }
 
     const handleDelete = (id:number) => {
@@ -80,9 +80,10 @@ const SingleTodo:React.FC<Props> = ({todo, todos,setTodos, index}) => {
                             <span className="icon" onClick={()=> handleDelete(todo.id)}>
                                 <AiFillDelete/>
                             </span>
+                            {!todo.isDone && 
                             <span className="icon" onClick={()=> handleDone(todo.id)}>
                                 <MdDone/>
-                            </span>
+                            </span>}
                         </div>
                     </form>
                 )

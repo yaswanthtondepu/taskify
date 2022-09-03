@@ -46,6 +46,9 @@ const App: React.FC = () => {
       completed.splice(source.index, 0, add);
     }
 
+    active.forEach(todo => todo.isDone = false);
+    completed.forEach(todo => todo.isDone = true);
+
     setCompletedTodos(completed);
     setTodos(active);
 
